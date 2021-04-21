@@ -1,4 +1,4 @@
-use super::lir_unary::LirMatMulUnary;
+use super::lir_unary::{LirMatMulUnary, MatMulGeometry};
 use super::*;
 use crate::internal::*;
 use tract_ndarray::prelude::*;
@@ -290,7 +290,7 @@ impl MatMulUnary {
                     !self.a_trans as usize,
                     self.a_trans as usize,
                 );
-                (pa.into_arc_tensor(), vec!())
+                (pa.into_arc_tensor(), vec![])
             });
         unsafe {
             let b_storage = if n == 1 {
@@ -319,15 +319,14 @@ impl MatMulUnary {
                 overrided_shape.swap(rank - 2, rank - 1);
                 strides.swap(rank - 2, rank - 1);
             }
+            let geometry = MatMulGeometry { mmm: mm, k, m };
             wire = patch.wire_node(
                 format!("{}.matmatmul", &*node.name),
                 LirMatMulUnary {
                     b_storage,
                     c_fact: TypedFact::dt_shape(c_dt, &c_shape),
+                    geometry,
                     micro_ops: packed_as,
-                    mmm: mm,
-                    k,
-                    m,
                     c_m_axis: rank - 2 + self.c_trans as usize,
                     c_n_axis: rank - 2 + !self.c_trans as usize,
                     c_final_shape: c_shape.into(),
