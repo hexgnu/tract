@@ -2,6 +2,7 @@ use std::borrow::Borrow;
 use std::fmt::{Debug, Display};
 use std::marker::PhantomData;
 
+use serde::{Serialize, Deserialize};
 use crate::internal::*;
 use crate::model::order::eval_order_for_nodes;
 use crate::model::{Fact, Graph, OutletId};
@@ -31,7 +32,7 @@ impl Debug for SessionState {
     }
 }
 
-#[derive(Debug, Clone, Educe)]
+#[derive(Debug, Clone, Educe, Serialize, Deserialize)]
 #[educe(Hash)]
 pub struct SimplePlan<F, O, M>
 where
