@@ -5,12 +5,13 @@ use tract_itertools::Itertools;
 use std::fmt;
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
+use serde::{Serialize,Deserialize};
 
 /// A Node in an Model.
 ///
 /// Parameterized by a Fact implementation matching the one used in the
 /// model.
-#[derive(Debug, Clone, Educe)]
+#[derive(Debug, Clone, Educe, Serialize, Deserialize)]
 #[educe(Hash)]
 pub struct Node<F: Fact + Hash, O: Hash> {
     /// node id in the model
@@ -70,7 +71,7 @@ where
 }
 
 /// Information for each outlet of a node
-#[derive(Clone, Default, Educe)]
+#[derive(Clone, Default, Educe, Serialize, Deserialize)]
 #[educe(Hash)]
 pub struct Outlet<F: Fact + Hash> {
     /// the tensor type information
@@ -95,7 +96,7 @@ impl<F: Fact + Hash> fmt::Debug for Outlet<F> {
 /// This happens to be a unique identifier of any variable tensor in the graph
 /// (as the graph typically connect one single node output to one or several
 /// inputs slots)
-#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, new)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, new, Serialize, Deserialize)]
 pub struct OutletId {
     /// node identifier in the graph
     pub node: usize,
@@ -122,7 +123,7 @@ impl From<(usize, usize)> for OutletId {
 }
 
 /// Identifier for a node input in the graph.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, new, Ord, PartialOrd)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, new, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct InletId {
     /// node identifier in the graph
     pub node: usize,
