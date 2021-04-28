@@ -4,6 +4,7 @@ use crate::terminal;
 use crate::CliResult;
 use crate::{BenchLimits, Parameters};
 use tract_hir::internal::*;
+use tract_itertools::Itertools;
 
 pub fn handle(
     params: &Parameters,
@@ -111,9 +112,23 @@ pub fn handle(
     if options.json {
         let export = crate::export::GraphPerfInfo::from(model, &annotations);
         serde_json::to_writer(std::io::stdout(), &export)?;
+    } else if options.rust {
+        let node_ids: Vec<usize> = (0..model.nodes_len()).collect();
+
+        println!("use tract_core::internal::*;");
+        println!("let mut model = TypedModel::default();");
+        println!("let input_fact = TypedFact::dt_shape(f32::datum_type(), [19].as_ref()).unwrap();");
+        for node in node_ids {
+//            println!("{:?}", model.node_op(node).info().unwrap()); 
+        }
+
+        println!("model.auto_outputs().unwrap();");
+
+        println!("let plan = SimplePlan::new(&model).unwrap();");
     } else {
         terminal::render(model, &annotations, options)?;
         terminal::render_summaries(model, &annotations, options)?;
+        println!("HEHE");
     }
 
     Ok(())

@@ -209,6 +209,7 @@ fn main() -> tract_core::anyhow::Result<()> {
 
     let dump = clap::SubCommand::with_name("dump")
         .long_about("Dumps the Tensorflow graph in human readable form.")
+        .arg(Arg::with_name("rust").long("rust").help("Compile to a SimplePlan"))
         .arg(Arg::with_name("cost").long("cost").help("Include const information"))
         .arg(Arg::with_name("profile").long("profile").help("Include results for profile run"))
         .arg(

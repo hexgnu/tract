@@ -794,6 +794,7 @@ pub fn display_params_from_clap(
     Ok(DisplayParams {
         konst: matches.is_present("const"),
         cost: matches.is_present("cost"),
+        rust: matches.is_present("rust"),
         profile: matches.is_present("profile"),
         left_column_width: 0,
         invariants: matches.is_present("invariants"),

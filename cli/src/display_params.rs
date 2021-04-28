@@ -24,6 +24,7 @@ pub struct DisplayParams {
     pub natural_order: bool,
     pub debug_op: bool,
     pub cost: bool,
+    pub rust: bool,
     pub profile: bool,
     pub node_ids: Option<Vec<TVec<(usize, String)>>>,
     pub op_name: Option<String>,
